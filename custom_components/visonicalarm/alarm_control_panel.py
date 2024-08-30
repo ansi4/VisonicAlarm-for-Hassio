@@ -30,6 +30,7 @@ ATTR_SYSTEM_CONNECTED = 'connected'
 ATTR_SYSTEM_SESSION_TOKEN = 'session_token'
 ATTR_SYSTEM_LAST_UPDATE = 'last_update'
 ATTR_CODE_FORMAT = 'code_format'
+ATTR_CODE_ARM_REQUIRED = 'code_arm_required'
 ATTR_CHANGED_BY = 'changed_by'
 ATTR_CHANGED_TIMESTAMP = 'changed_timestamp'
 ATTR_ALARMS = 'alarm'
@@ -69,14 +70,14 @@ def setup_platform(hass, config, add_devices, discovery_info=None):
 
 class VisonicAlarm(alarm.AlarmControlPanelEntity):
     """ Representation of a Visonic Alarm control panel. """
-  
+
     def __init__(self, hass):
         """ Initialize the Visonic Alarm panel. """
         self._hass = hass
         self._state = STATE_UNKNOWN
         self._code = hub.config.get(CONF_USER_CODE)
         self._no_pin_required = hub.config.get(CONF_NO_PIN_REQUIRED)
-        self._attr_code_arm_required = hub.config.get(CONF_CODE_ARM_REQUIRED)
+        self._code_arm_required = hub.config.get(CONF_CODE_ARM_REQUIRED)
         self._changed_by = None
         self._changed_timestamp = None
         self._event_hour_offset = hub.config.get(CONF_EVENT_HOUR_OFFSET)
@@ -97,6 +98,7 @@ class VisonicAlarm(alarm.AlarmControlPanelEntity):
             ATTR_SYSTEM_SESSION_TOKEN: hub.alarm.session_token,
             ATTR_SYSTEM_LAST_UPDATE: hub.last_update,
             ATTR_CODE_FORMAT: self.code_format,
+            ATTR_CODE_ARM_REQUIRED: self.code_arm_required,
             ATTR_CHANGED_BY: self.changed_by,
             ATTR_CHANGED_TIMESTAMP: self._changed_timestamp,
             ATTR_ALARMS: hub.alarm.alarm,
@@ -128,6 +130,11 @@ class VisonicAlarm(alarm.AlarmControlPanelEntity):
             return None
         else:
             return 'Number'
+
+    @property
+    def code_arm_required(self):
+        """ Return if the code required when arming. """
+        return self._code_arm_required
 
     @property
     def changed_by(self):

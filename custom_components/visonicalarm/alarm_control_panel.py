@@ -17,7 +17,7 @@ from homeassistant.components.alarm_control_panel.const import (
     SUPPORT_ALARM_ARM_HOME
 )
 from . import HUB as hub
-from . import (CONF_USER_CODE, CONF_EVENT_HOUR_OFFSET, CONF_NO_PIN_REQUIRED)
+from . import (CONF_USER_CODE, CONF_EVENT_HOUR_OFFSET, CONF_NO_PIN_REQUIRED, CONF_CODE_ARM_REQUIRED)
 
 SUPPORT_VISONIC = (SUPPORT_ALARM_ARM_HOME | SUPPORT_ALARM_ARM_AWAY)
 
@@ -69,13 +69,14 @@ def setup_platform(hass, config, add_devices, discovery_info=None):
 
 class VisonicAlarm(alarm.AlarmControlPanelEntity):
     """ Representation of a Visonic Alarm control panel. """
-    _attr_code_arm_required = False
+  
     def __init__(self, hass):
         """ Initialize the Visonic Alarm panel. """
         self._hass = hass
         self._state = STATE_UNKNOWN
         self._code = hub.config.get(CONF_USER_CODE)
         self._no_pin_required = hub.config.get(CONF_NO_PIN_REQUIRED)
+        self._attr_code_arm_required = hub.config.get(CONF_CODE_ARM_REQUIRED)
         self._changed_by = None
         self._changed_timestamp = None
         self._event_hour_offset = hub.config.get(CONF_EVENT_HOUR_OFFSET)
@@ -185,7 +186,7 @@ class VisonicAlarm(alarm.AlarmControlPanelEntity):
 
     def alarm_arm_home(self, code=None):
         """ Send arm home command. """
-        if self._no_pin_required == False:
+        if not self._no_pin_required and not self._attr_code_arm_required:
             if code != self._code:
                 pn.create(self._hass, 'You entered the wrong arm code.', title='Arm Failed')
                 return
@@ -202,7 +203,7 @@ class VisonicAlarm(alarm.AlarmControlPanelEntity):
 
     def alarm_arm_away(self, code=None):
         """ Send arm away command. """
-        if self._no_pin_required == False:
+        if not self._no_pin_required and not self._attr_code_arm_required:
             if code != self._code:
                 pn.create(self._hass, 'You entered the wrong arm code.', title='Unable to Arm')
                 return

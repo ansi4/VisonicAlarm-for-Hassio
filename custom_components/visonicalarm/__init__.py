@@ -20,6 +20,7 @@ REQUIREMENTS = ['visonicalarm2==3.2.1', 'python-dateutil==2.7.3']
 _LOGGER = logging.getLogger(__name__)
 
 CONF_NO_PIN_REQUIRED = 'no_pin_required'
+CONF_CODE_ARM_REQUIRED = 'code_arm_required'
 CONF_USER_CODE = 'user_code'
 CONF_APP_ID = 'app_id'
 CONF_USER_EMAIL = 'user_email'
@@ -53,6 +54,7 @@ CONFIG_SCHEMA = vol.Schema({
         vol.Optional(CONF_PARTITION, default=DEFAULT_PARTITION): cv.string,
         vol.Optional(CONF_NAME, default=DEFAULT_NAME): cv.string,
         vol.Optional(CONF_NO_PIN_REQUIRED, default=False): cv.boolean,
+        vol.Optional(CONF_CODE_ARM_REQUIRED, default=False): cv.boolean,
         vol.Optional(CONF_EVENT_HOUR_OFFSET, default=0): vol.All(vol.Coerce(int), vol.Range(min=-24, max=24)),
     }),
 }, extra=vol.ALLOW_EXTRA)

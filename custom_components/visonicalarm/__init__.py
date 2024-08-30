@@ -20,6 +20,7 @@ REQUIREMENTS = ['visonicalarm2==3.1.3', 'python-dateutil==2.7.3']
 _LOGGER = logging.getLogger(__name__)
 
 CONF_NO_PIN_REQUIRED = 'no_pin_required'
+CONF_CODE_ARM_REQUIRED = 'code_arm_required'
 CONF_USER_CODE = 'user_code'
 CONF_APP_ID = 'app_id'
 CONF_USER_EMAIL = 'user_email'

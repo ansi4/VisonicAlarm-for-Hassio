@@ -193,7 +193,7 @@ class VisonicAlarm(alarm.AlarmControlPanelEntity):
 
     def alarm_arm_home(self, code=None):
         """ Send arm home command. """
-        if not self._no_pin_required and not self._attr_code_arm_required:
+        if not self._no_pin_required and not self._code_arm_required:
             if code != self._code:
                 pn.create(self._hass, 'You entered the wrong arm code.', title='Arm Failed')
                 return
@@ -210,7 +210,7 @@ class VisonicAlarm(alarm.AlarmControlPanelEntity):
 
     def alarm_arm_away(self, code=None):
         """ Send arm away command. """
-        if not self._no_pin_required and not self._attr_code_arm_required:
+        if not self._no_pin_required and not self._code_arm_required:
             if code != self._code:
                 pn.create(self._hass, 'You entered the wrong arm code.', title='Unable to Arm')
                 return

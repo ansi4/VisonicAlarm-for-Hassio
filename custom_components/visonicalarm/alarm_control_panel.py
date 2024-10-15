@@ -34,6 +34,8 @@ ATTR_CODE_ARM_REQUIRED = 'code_arm_required'
 ATTR_CHANGED_BY = 'changed_by'
 ATTR_CHANGED_TIMESTAMP = 'changed_timestamp'
 ATTR_ALARMS = 'alarm'
+ATTR_WAKEUP_SMS = "wakup_sms"
+ATTR_WAKEUP_SMS_NUMBER = "wakup_sms_phone_number"
 
 SCAN_INTERVAL = timedelta(seconds=10)
 
@@ -102,6 +104,8 @@ class VisonicAlarm(alarm.AlarmControlPanelEntity):
             ATTR_CHANGED_BY: self.changed_by,
             ATTR_CHANGED_TIMESTAMP: self._changed_timestamp,
             ATTR_ALARMS: hub.alarm.alarm,
+            ATTR_WAKEUP_SMS: hub.alarm.wakeup_sms,
+            ATTR_WAKEUP_SMS_NUMBER: hub.alarm.wakeup_sms_number,
         }
 
     @property

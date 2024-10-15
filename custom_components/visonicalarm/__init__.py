@@ -74,6 +74,12 @@ def setup(hass, config):
     for component in ('sensor', 'alarm_control_panel'):
         discovery.load_platform(hass, component, DOMAIN, {}, config)
 
+    def update_wakeup_sms_service(call):
+        """Handle update wakeup sms call"""
+        HUB.update_wakeup_sms()
+    
+    hass.services.register(DOMAIN, "update_wakeup_sms", update_wakeup_sms_service)
+
     return True
 
 
@@ -125,6 +131,16 @@ class VisonicAlarmHub(Entity):
             self.alarm.update_devices()
 
             self._last_update = datetime.now()
+        except Exception as ex:
+            _LOGGER.error('Update failed: %s', ex)
+            raise
+
+    def update_wakeup_sms(self):
+        try:
+            if self.alarm.is_token_valid == False:
+                self.alarm.connect()
+            
+            self.alarm.update_wakeup_sms()
         except Exception as ex:
             _LOGGER.error('Update failed: %s', ex)
             raise

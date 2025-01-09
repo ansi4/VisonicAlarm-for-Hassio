@@ -5,9 +5,10 @@ import logging
 from datetime import timedelta
 
 from . import HUB as hub
-from homeassistant.const import (STATE_ALARM_ARMED_AWAY, STATE_ALARM_ARMED_HOME)
-from homeassistant.const import (STATE_ALARM_DISARMED, STATE_UNKNOWN,
-                                 STATE_OPEN, STATE_CLOSED)
+from homeassistant.const import (
+    STATE_UNKNOWN,
+    STATE_OPEN,
+    STATE_CLOSED)
 from homeassistant.helpers.entity import Entity
 
 _LOGGER = logging.getLogger(__name__)

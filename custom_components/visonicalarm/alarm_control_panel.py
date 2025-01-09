@@ -7,19 +7,19 @@ from datetime import timedelta
 
 import homeassistant.components.alarm_control_panel as alarm
 import homeassistant.components.persistent_notification as pn
-from homeassistant.const import (STATE_ALARM_ARMED_AWAY, STATE_ALARM_ARMED_HOME,
-                                 STATE_ALARM_DISARMED, STATE_UNKNOWN,
-                                 STATE_ALARM_ARMING, STATE_ALARM_PENDING, STATE_ALARM_TRIGGERED )
+
 from homeassistant.const import (EVENT_STATE_CHANGED)
 from homeassistant.const import (ATTR_CODE_FORMAT)
-from homeassistant.components.alarm_control_panel.const import (
-    SUPPORT_ALARM_ARM_AWAY,
-    SUPPORT_ALARM_ARM_HOME
+from homeassistant.const import (
+    STATE_UNKNOWN
+)
+from homeassistant.components.alarm_control_panel import (
+    AlarmControlPanelState
 )
 from . import HUB as hub
 from . import (CONF_USER_CODE, CONF_EVENT_HOUR_OFFSET, CONF_NO_PIN_REQUIRED, CONF_CODE_ARM_REQUIRED)
 
-SUPPORT_VISONIC = (SUPPORT_ALARM_ARM_HOME | SUPPORT_ALARM_ARM_AWAY)
+SUPPORT_VISONIC = (AlarmControlPanelState.ARMED_HOME | AlarmControlPanelState.ARMED_AWAY)
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -111,13 +111,13 @@ class VisonicAlarm(alarm.AlarmControlPanelEntity):
     @property
     def icon(self):
         """ Return icon """
-        if self._state == STATE_ALARM_ARMED_AWAY:
+        if self._state == AlarmControlPanelState.ARMED_AWAY:
             return 'mdi:shield-lock'
-        elif self._state == STATE_ALARM_ARMED_HOME:
+        elif self._state == AlarmControlPanelState.ARMED_HOME:
             return 'mdi:shield-home'
-        elif self._state == STATE_ALARM_DISARMED:
+        elif self._state == AlarmControlPanelState.DISARMED:
             return 'mdi:shield-check'
-        elif self._state == STATE_ALARM_ARMING:
+        elif self._state == AlarmControlPanelState.ARMING:
             return 'mdi:shield-outline'
         else:
             return 'hass:bell-ring'
@@ -165,17 +165,17 @@ class VisonicAlarm(alarm.AlarmControlPanelEntity):
         hub.update()
         status = hub.alarm.state
         if status == 'AWAY':
-            self._state = STATE_ALARM_ARMED_AWAY
+            self._state = AlarmControlPanelState.ARMED_AWAY
         elif status == 'HOME':
-            self._state = STATE_ALARM_ARMED_HOME
+            self._state = AlarmControlPanelState.ARMED_HOME
         elif status == 'DISARM':
-            self._state = STATE_ALARM_DISARMED
+            self._state = AlarmControlPanelState.DISARMED
         elif status == 'ARMING':
-            self._state = STATE_ALARM_ARMING
+            self._state = AlarmControlPanelState.ARMING
         elif status == 'ENTRYDELAY':
-            self._state = STATE_ALARM_PENDING
+            self._state = AlarmControlPanelState.PENDING
         elif status == 'ALARM':
-            self._state = STATE_ALARM_TRIGGERED
+            self._state = AlarmControlPanelState.TRIGGERED
         else:
             self._state = status
 

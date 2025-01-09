@@ -14,12 +14,13 @@ from homeassistant.const import (
     STATE_UNKNOWN
 )
 from homeassistant.components.alarm_control_panel import (
-    AlarmControlPanelState
+    AlarmControlPanelState,
+    AlarmControlPanelEntityFeature
 )
 from . import HUB as hub
 from . import (CONF_USER_CODE, CONF_EVENT_HOUR_OFFSET, CONF_NO_PIN_REQUIRED, CONF_CODE_ARM_REQUIRED)
 
-SUPPORT_VISONIC = (AlarmControlPanelState.ARMED_HOME | AlarmControlPanelState.ARMED_AWAY)
+SUPPORT_VISONIC = (AlarmControlPanelEntityFeature.ARM_HOME | AlarmControlPanelEntityFeature.ARM_AWAY)
 
 _LOGGER = logging.getLogger(__name__)
 

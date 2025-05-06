@@ -129,6 +129,11 @@ class VisonicAlarm(alarm.AlarmControlPanelEntity):
     def state(self):
         """ Return the state of the device. """
         return self._state
+    
+    @property
+    def alarm_state(self):
+        """ Return the state of the alarm. """
+        return self._state
 
     @property
     def code_format(self):

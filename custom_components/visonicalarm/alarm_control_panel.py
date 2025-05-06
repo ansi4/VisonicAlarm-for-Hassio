@@ -75,7 +75,7 @@ class VisonicAlarm(alarm.AlarmControlPanelEntity):
     def __init__(self, hass):
         """ Initialize the Visonic Alarm panel. """
         self._hass = hass
-        self._state = STATE_UNKNOWN
+        self._attr_alarm_state = None
         self._code = hub.config.get(CONF_USER_CODE)
         self._no_pin_required = hub.config.get(CONF_NO_PIN_REQUIRED)
         self._code_arm_required = hub.config.get(CONF_CODE_ARM_REQUIRED)
@@ -114,26 +114,21 @@ class VisonicAlarm(alarm.AlarmControlPanelEntity):
     @property
     def icon(self):
         """ Return icon """
-        if self._state == AlarmControlPanelState.ARMED_AWAY:
+        if self._attr_alarm_state == AlarmControlPanelState.ARMED_AWAY:
             return 'mdi:shield-lock'
-        elif self._state == AlarmControlPanelState.ARMED_HOME:
+        elif self._attr_alarm_state == AlarmControlPanelState.ARMED_HOME:
             return 'mdi:shield-home'
-        elif self._state == AlarmControlPanelState.DISARMED:
+        elif self._attr_alarm_state == AlarmControlPanelState.DISARMED:
             return 'mdi:shield-check'
-        elif self._state == AlarmControlPanelState.ARMING:
+        elif self._attr_alarm_state == AlarmControlPanelState.ARMING:
             return 'mdi:shield-outline'
         else:
             return 'hass:bell-ring'
-
-    @property
-    def state(self):
-        """ Return the state of the device. """
-        return self._state
     
     @property
     def alarm_state(self):
         """ Return the state of the alarm. """
-        return self._state
+        return self._attr_alarm_state
 
     @property
     def code_format(self):
@@ -173,19 +168,19 @@ class VisonicAlarm(alarm.AlarmControlPanelEntity):
         hub.update()
         status = hub.alarm.state
         if status == 'AWAY':
-            self._state = AlarmControlPanelState.ARMED_AWAY
+            self._attr_alarm_state = AlarmControlPanelState.ARMED_AWAY
         elif status == 'HOME':
-            self._state = AlarmControlPanelState.ARMED_HOME
+            self._attr_alarm_state = AlarmControlPanelState.ARMED_HOME
         elif status == 'DISARM':
-            self._state = AlarmControlPanelState.DISARMED
+            self._attr_alarm_state = AlarmControlPanelState.DISARMED
         elif status == 'ARMING':
-            self._state = AlarmControlPanelState.ARMING
+            self._attr_alarm_state = AlarmControlPanelState.ARMING
         elif status == 'ENTRYDELAY':
-            self._state = AlarmControlPanelState.PENDING
+            self._attr_alarm_state = AlarmControlPanelState.PENDING
         elif status == 'ALARM':
-            self._state = AlarmControlPanelState.TRIGGERED
+            self._attr_alarm_state = AlarmControlPanelState.TRIGGERED
         else:
-            self._state = status
+            self._attr_alarm_state = status
 
     @property
     def supported_features(self) -> int:
